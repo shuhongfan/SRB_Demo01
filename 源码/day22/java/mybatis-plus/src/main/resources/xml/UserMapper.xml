@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.mybatisplus.mapper.UserMapper">
+
+<!--    <resultMap id="myUser" type="com.atguigu.mybatisplus.entity.User">
+        <id column="uid" property="id" />
+        <result column="username" property="name" />
+    </resultMap>-->
+
+    <sql id="Base_Column_List">
+        uid as id,
+        username as name,
+        age,
+        email,
+        is_deleted as deleted,
+        create_time as createTime,
+        update_time as updateTime
+    </sql>
+
+    <select id="selectAllByName" resultType="com.atguigu.mybatisplus.entity.User">
+        select <include refid="Base_Column_List" />
+        from t_user
+        where name = #{name}
+    </select>
+
+    <select id="selectPageByAge" resultType="com.atguigu.mybatisplus.entity.User">
+        select <include refid="Base_Column_List" />
+        from t_user
+        where age > #{age}
+    </select>
+</mapper>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>人物介绍-贾玲</h1>
+      <p>
+        <router-link to="/jbxx">基本信息</router-link>
+        <router-link to="/yyjl">演艺经历</router-link>
+        <router-link to="/zyzp">主要作品</router-link>
+      </p>
+
+      <!-- 路由出口 -->
+      <router-view></router-view>
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+    <script>
+      //1、定义组件模板
+      const jbxx = { template: '<div>贾晓玲 30岁 女 喜剧演员</div>' }
+      const yyjl = { template: '<div>相声 小品 导演</div>' }
+      const zyzp = { template: '<div>你好 李焕英</div>' }
+
+      //2、定义路由列表
+      const routes = [
+        { path: '/jbxx', component: jbxx },
+        { path: '/yyjl', component: yyjl },
+        { path: '/zyzp', component: zyzp },
+      ]
+
+      //3、创建路由对象
+      const router = new VueRouter({
+        routes,
+      })
+
+      //4、配置路由对象
+      new Vue({
+        el: '#app',
+        router,
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" v-model="message" />
+      <p>{{message}}</p>
+
+      <!-- 缺点：大量的业务逻辑写在了视图中，页面代码不简洁 -->
+      <p>反转字符串： {{ message.split('').reverse().join('') }}</p>
+
+      <!-- 计算属性 -->
+      <p>计算属性：{{reversedMessage}}</p>
+      <p>计算属性：{{reversedMessage}}</p>
+      <p>计算属性：{{reversedMessage}}</p>
+      <p>计算属性：{{reversedMessage}}</p>
+
+      <!-- 方法 -->
+      <p>方法：{{reversed()}}</p>
+      <p>方法：{{reversed()}}</p>
+      <p>方法：{{reversed()}}</p>
+      <p>方法：{{reversed()}}</p>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            message: 'hello',
+          }
+        },
+
+        computed: {
+          reversedMessage() {
+            console.log('reversedMessage计算属性被计算')
+            return this.message.split('').reverse().join('')
+          },
+        },
+
+        methods: {
+          reversed() {
+            console.log('reversed方法被调用')
+            return this.message.split('').reverse().join('')
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

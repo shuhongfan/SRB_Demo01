@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      // import * as m1 from './m1.js'
+      // import * as m2 from './m2.js'
+
+      // console.log(m1)
+      // console.log(m2)
+      // console.log(m1.star)
+      // console.log(m2.star)
+
+      // m1.sing('大城小爱')
+
+      //另一种导入方式
+      // import { star, sing } from './m1.js'
+      // import { star as star1 } from './m2.js'
+
+      // console.log(star)
+      // sing('依然爱你')
+
+      // console.log(star1)
+
+      //导入默认的模块 default模块
+      import m3 from './m3.js'
+      console.log(m3)
+      console.log(m3.username)
+      console.log(m3.age)
+      m3.coding()
+    </script>
+  </body>
+</html>

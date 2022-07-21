@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <table>
+        <tr>
+          <td>序号</td>
+          <td>姓名</td>
+          <td>年龄</td>
+          <td>email</td>
+        </tr>
+        <tr v-for="(item, index) in userList">
+          <td>{{index + 1}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.age}}</td>
+          <td>{{item.email}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            userList: [],
+          }
+        },
+
+        created() {
+          this.showUserList()
+        },
+
+        methods: {
+          showUserList() {
+            //通过axios访问远程接口
+            const request = axios.create({
+              baseURL: 'http://localhost:8080', //主机地址
+            })
+
+            request
+              .get('/user/list')
+              .then((response) => {
+                console.log('数据获取成功', response)
+                this.userList = response.data
+              })
+              .catch((error) => {
+                console.log('数据获取失败', error)
+              })
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <button v-on:click="hello('helen')">点击事件</button>
+      <button v-on:click="study">去学习</button>
+      <button @click="study">去学习</button>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+
+        methods: {
+          hello(username) {
+            alert('hello ' + username)
+          },
+
+          study() {
+            alert('day day up')
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

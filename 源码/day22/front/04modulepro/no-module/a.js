@@ -1,0 +1,1 @@
+let star = 5

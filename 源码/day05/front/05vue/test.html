@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="vue.js"></script>
+    <!-- v-bind: 指令的简写形式 : -->
+    <div id="app">
+      <a :href="site" target="_blank">{{company}}</a>
+      <input type="text" :value="company" />
+      <input type="text" v-model="company" />
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          company: '尚硅谷',
+          site: 'http://www.atguigu.com',
+        },
+      })
+    </script>
+  </body>
+</html>

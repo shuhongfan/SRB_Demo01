@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1 id="h1">{{message}}</h1>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            message: '床前明月光',
+          }
+        },
+
+        //创建完成
+        //先执行，可以访问到数据模型，可以访问到成员方法
+        created() {
+          console.log('Vue实例创建完成')
+          console.log('created中获取message的定义 ' + this.message)
+          this.show()
+
+          console.log(
+            'created中获取h1元素的内容' +
+              document.getElementById('h1').innerText
+          )
+        },
+
+        //渲染完成
+        //后执行，可以访问到数据模型，可以访问到成员方法
+        mounted() {
+          console.log('Vue页面渲染完成')
+          console.log('mounted中获取message的定义 ' + this.message)
+          this.show()
+
+          console.log(
+            'mounted中获取h1元素的内容' +
+              document.getElementById('h1').innerText
+          )
+        },
+
+        methods: {
+          show() {
+            console.log('访问show方法')
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

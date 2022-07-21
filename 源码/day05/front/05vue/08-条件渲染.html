@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="checkbox" v-model="ok" />是否同意许可协议 <br />
+      <!-- 删除节点  创建节点 -->
+      <button v-if="ok">下一步if</button>
+      <button v-else disabled>下一步else</button>
+
+      <!-- 隐藏节点 显示节点 -->
+      <button v-show="ok">下一步show</button>
+      <button v-show="!ok" disabled>下一步show</button>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            ok: false, //是否同意许可协议
+          }
+        },
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head> </head>
+  <body>
+    <form
+      name="form"
+      action="http://localhost:9999/userBind/BindAgreeUserV2"
+      method="post"
+    >
+      <!-- 参数 -->
+      <input type="text" name="agentId" value="1" />
+      <input type="text" name="agentBillNo" value="2" />
+      <input type="text" name="bindCode" value="3" />
+      <!-- 。。。。。。 -->
+      <input type="text" name="sign" value="342343uirjfbnbdfn" />
+    </form>
+
+    <script>
+      // 表单自动提交
+      document.form.submit()
+    </script>
+  </body>
+</html>

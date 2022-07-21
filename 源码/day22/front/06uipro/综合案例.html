@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- 引入样式 -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <el-button>默认按钮</el-button>
+        <el-button type="primary" plain round disabled>提交表单</el-button>
+        <el-button type="success" size="small">成功按钮</el-button>
+        <el-button type="info" size="mini">信息按钮</el-button>
+        <el-button type="warning" loading>数据加载中</el-button>
+        <el-button type="danger" icon="el-icon-lightning">危险按钮</el-button>
+        <el-button type="text">超链接按钮</el-button>
+        <el-button icon="el-icon-search" circle></el-button>
+        <el-button type="primary" icon="el-icon-edit" circle></el-button>
+        <el-button type="success" icon="el-icon-check" circle></el-button>
+        <el-button type="info" icon="el-icon-message" circle></el-button>
+        <el-button type="warning" icon="el-icon-star-off" circle></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle></el-button>
+      </div>
+
+      <el-table border stripe :data="userList" style="width: 100%">
+        <el-table-column type="selection" width="50"> </el-table-column>
+        <el-table-column type="index" width="50"> </el-table-column>
+        <el-table-column prop="name" label="姓名" width="180">
+        </el-table-column>
+        <el-table-column prop="age" label="年龄"> </el-table-column>
+        <el-table-column prop="email" label="email"> </el-table-column>
+      </el-table>
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            userList: [],
+          }
+        },
+
+        created() {
+          this.showUserList()
+        },
+
+        methods: {
+          showUserList() {
+            //通过axios访问远程接口
+            const request = axios.create({
+              baseURL: 'http://localhost:8080', //主机地址
+            })
+
+            request
+              .get('/user/list')
+              .then((response) => {
+                console.log('数据获取成功', response)
+                this.userList = response.data
+              })
+              .catch((error) => {
+                console.log('数据获取失败', error)
+              })
+          },
+        },
+      })
+    </script>
+  </body>
+</html>

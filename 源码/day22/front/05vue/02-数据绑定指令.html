@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 使用数据绑定指令渲染html的动态属性 -->
+      <a v-bind:href="site">{{company}}</a>
+      <a :href="site">{{company}}</a>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          company: '尚硅谷',
+          site: 'http://www.atguigu.com',
+        },
+      })
+    </script>
+  </body>
+</html>

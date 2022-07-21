@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head> </head>
+  <body>
+    <form
+      name="form"
+      action="http://localhost:9999/userAccount/AgreeBankCharge"
+      method="post"
+    >
+      <input type="hidden" name="agentId" value="999888" />
+      <input type="hidden" name="chargeAmt" value="10" />
+      <input
+        type="hidden"
+        name="sign"
+        value="35e87d15e8a18ef55e9d4545ec08e54e"
+      />
+      <input
+        type="hidden"
+        name="notifyUrl"
+        value="http://localhost/api/core/userAccount/notify"
+      />
+      <input
+        type="hidden"
+        name="returnUrl"
+        value="http://localhost:3000/user"
+      />
+      <input
+        type="hidden"
+        name="bindCode"
+        value="7777428d73ba4aeca331a636a5863283"
+      />
+      <input type="hidden" name="feeAmt" value="0" /><input
+        type="hidden"
+        name="agentBillNo"
+        value="CHARGE20210313100928456"
+      />
+      <input type="hidden" name="timestamp" value="1615601368415" />
+      <script>
+        document.form.submit()
+      </script>
+    </form>
+  </body>
+</html>
