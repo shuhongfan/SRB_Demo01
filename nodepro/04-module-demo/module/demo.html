@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="module">
+    import * as m1 from './m1.js'
+    import * as m2 from './m2.js'
+
+    console.log(m1);
+    console.log(m2);
+
+    console.log(m1.star)
+    console.log(m2.star)
+
+    //还可以这样导入：解构赋值的形式
+    import {star, sing} from './m1.js'
+    import {star as star2} from './m2.js' //使用as防止重名
+    console.log(star)
+    sing()
+    console.log(star2)
+
+
+    import m3 from "./m3.js";
+    console.log(m3)
+</script>
+</body>
+</html>

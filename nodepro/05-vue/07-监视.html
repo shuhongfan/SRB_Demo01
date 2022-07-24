@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    姓: <input placeholder="First Name" v-model="firstName"/><br/>
+    名: <input placeholder="Last Name" v-model="lastName"/><br/>
+    姓名: <input placeholder="Full Name" v-model="fullName"/><br/>
+</div>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            firstName: 'Helen',
+            lastName: 'Yao',
+            // fullName: 'Helen Yao',
+        },
+        computed:{
+            fullName(){
+                return this.firstName+ ' '+this.lastName
+            }
+        },
+        watch: {
+            //当firstName改变时自动调用
+            firstName(val) {
+                console.log("watch firstName")
+                this.fullName = val + ' ' + this.lastName
+            },
+            //当lastName改变时自动调用
+            lastName(val) {
+                console.log("watch lastName")
+                this.fullName = this.firstName + ' ' + val
+            },
+            fullName(val) {
+                let split = val.split(' ');
+                this.firstName=split[0]
+                this.lastName=split[1]
+            },
+        }
+    })
+</script>
+</body>
+</html>

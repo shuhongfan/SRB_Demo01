@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <table border>
+        <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>email</th>
+        </tr>
+        <tr v-for="(item, index) in userList">
+            <td>{{index + 1}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.age}}</td>
+            <td>{{item.email}}</td>
+        </tr>
+    </table>
+</div>
+
+<script src="vue.js"></script>
+<script src="axios.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                userList: [],
+            }
+        },
+
+        created() {
+            this.showList()
+        },
+
+        methods: {
+            showList() {
+                //使用自定义配置
+                const request = axios.create({
+                    baseURL: 'http://localhost:8080', //url前缀
+                    timeout: 1000, //超时时间
+                    headers: {token: 'helen123456'}, //携带令牌
+                })
+
+                // 请求拦截器
+                request.interceptors.request.use(
+                    function (config) {
+                        // 在发送请求之前做些什么，例如：在请求头中携带一个令牌
+                        config.headers.token = 'helen123456'
+                        return config
+                    },
+                    function (error) {
+                        // 对请求错误做些什么
+                        return Promise.reject(error)
+                    }
+                )
+
+                // 添加响应拦截器
+                request.interceptors.response.use(
+                    function (response) {
+                        // 对响应数据做点什么，例如：使用response.data替代response，简化前端拿到的数据结果
+                        return response.data
+                    },
+                    function (error) {
+                        // 对响应错误做点什么
+                        return Promise.reject(error)
+                    }
+                )
+
+                //基于promise
+                request({
+                    method: 'get',
+                    url: '/user/list',
+                })
+                    .then((response) => {
+                        console.log('获取数据成功', response)
+                        this.userList = response
+                    })
+                    .catch((error) => {
+                        console.log('获取数据失败', error)
+                    })
+            },
+        },
+    })
+</script>
+</body>
+</html>

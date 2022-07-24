@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <button v-on:click="study">去学习</button>
+
+    <!-- v-on: 指令的简写形式 @ -->
+    <button @click="study">去学习</button>
+</div>
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            company: '尚硅谷'
+        },
+
+        methods: {
+            study() {
+                alert('我要去' + this.company + '学习')
+            }
+        }
+    })
+</script>
+</body>
+</html>

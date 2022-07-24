@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+    <h1>Hello App!</h1>
+    <p>
+        <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
+        <!-- 通过传入 `to` 属性指定链接. -->
+        <router-link to="/">首页</router-link>
+        <router-link to="/invest">我要投资</router-link>
+        <router-link to="/user">用户中心</router-link>
+    </p>
+    <!-- 路由出口 -->
+    <!-- 路由匹配到的组件将渲染在这里 -->
+    <router-view></router-view>
+</div>
+<script>
+    // 1. 定义（路由）组件。
+    // 复杂的组件也可以从独立的vue文件中引入
+    const welcome = {template: '<div>尚融宝主页</div>'}
+    const invest = {template: '<div>投资产品</div>'}
+    const user = {template: '<div>用户信息</div>'}
+
+    // 2. 定义路由
+    // 每个路由应该映射一个组件。
+    const routes = [
+        {path: '/', redirect: '/welcome'}, //设置默认指向的路径
+        {path: '/welcome', component: welcome},
+        {path: '/invest', component: invest},
+        {path: '/user', component: user},
+    ]
+
+    // 3. 创建 router 实例，然后传 `routes` 配置
+    const router = new VueRouter({
+        routes, // （缩写）相当于 routes: routes
+    })
+
+    // 4. 创建和挂载根实例。
+    // 从而让整个应用都有路由功能
+    new Vue({
+        el: '#app',
+        router,
+    })
+
+    // 现在，应用已经启动了！
+</script>
+</body>
+</html>

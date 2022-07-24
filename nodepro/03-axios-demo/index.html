@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="axios.js"></script>
+</head>
+<body>
+<script>
+    //使用自定义配置
+    const request = axios.create({
+        baseURL: 'http://localhost:8080', //url前缀
+        timeout: 1000, //超时时间
+        headers: {'token': 'helen123456'} //携带令牌
+    })
+
+    // 请求拦截器
+    request.interceptors.request.use(
+        function (config) {
+            // 在发送请求之前做些什么，例如：在请求头中携带一个令牌
+            console.log('请求拦截器执行了',config)
+            config.headers.token = 'helen123456'
+            return config // 放行
+        },
+        function (error) {
+            // 对请求错误做些什么
+            return Promise.reject(error)
+        }
+    )
+
+    // 添加响应拦截器
+    request.interceptors.response.use(
+        function (response) {
+            console.log("响应拦截器",response)
+            // 对响应数据做点什么，例如：使用response.data替代response，简化前端拿到的数据结果
+            return response.data
+        },
+        function (error) {
+            // 对响应错误做点什么
+            return Promise.reject(error)
+        }
+    )
+
+    request({
+        url: '/user/list',
+        method: 'get'
+    })
+        .then(res => {
+            console.log("获取数据成功：", res);
+        })
+        .catch(err => {
+            console.log("获取数据失败：", err);
+        })
+
+    //另一种写法
+    request
+        .get('/user/list')
+        .then((response) => {
+            console.log('获取数据成功1', response)
+        })
+        .catch((error) => {
+            console.log('获取数据失败1', error)
+        })
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-button>默认按钮</el-button>
+    <el-table :data="userList" stripe border style="width: 100%">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="index" width="55" label="序号"></el-table-column>
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="age" label="年龄"></el-table-column>
+        <el-table-column prop="email" label="email"></el-table-column>
+    </el-table>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                userList: [],
+            }
+        },
+
+        created() {
+            this.showList()
+        },
+
+        methods: {
+            showList() {
+                //使用自定义配置
+                const request = axios.create({
+                    baseURL: 'http://localhost:8080', //url前缀
+                    timeout: 1000, //超时时间
+                    headers: {token: 'helen123456'}, //携带令牌
+                })
+
+                // 请求拦截器
+                request.interceptors.request.use(
+                    function (config) {
+                        // 在发送请求之前做些什么，例如：在请求头中携带一个令牌
+                        config.headers.token = 'helen123456'
+                        return config
+                    },
+                    function (error) {
+                        // 对请求错误做些什么
+                        return Promise.reject(error)
+                    }
+                )
+
+                // 添加响应拦截器
+                request.interceptors.response.use(
+                    function (response) {
+                        // 对响应数据做点什么，例如：使用response.data替代response，简化前端拿到的数据结果
+                        return response.data
+                    },
+                    function (error) {
+                        // 对响应错误做点什么
+                        return Promise.reject(error)
+                    }
+                )
+
+                //基于promise
+                request({
+                    method: 'get',
+                    url: '/user/list',
+                })
+                    .then((response) => {
+                        console.log('获取数据成功', response)
+                        this.userList = response
+                    })
+                    .catch((error) => {
+                        console.log('获取数据失败', error)
+                    })
+            },
+        },
+    })
+</script>
+</body>
+</html>

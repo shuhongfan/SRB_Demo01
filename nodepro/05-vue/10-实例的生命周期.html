@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <h3 id="h3">{{ message }}</h3>
+</div>
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: '床前明月光'
+        },
+        // 页面在内存中已经初始化完毕：
+        // 可以操作 data 中的数据、调用methods中的方法
+        // 但是数据尚未被渲染到页面中：用户看不见
+        created() {
+            console.log('created')
+            //可以操作 data 中的数据
+            console.log(this.message)
+            //可以调用methods中的方法
+            this.show()
+            //无法取出dom节点取数据，说明用户无法在浏览器中看见这个内容
+            console.log(document.getElementById('h3').innerText)
+        },
+
+        // 数据已经被渲染到页面中
+        mounted() { // 第四个被执行的钩子方法
+            console.log('mounted')
+            //可以取出dom节点取数据，说明用户已经在浏览器中看见内容
+            console.log(document.getElementById('h3').innerText)
+        },
+
+        methods: {
+            show() {
+                console.log('show方法被调用')
+            }
+        },
+    })
+</script>
+</body>
+</html>

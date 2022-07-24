@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--什么是双向数据绑定？-->
+<!--当数据发生变化的时候，视图也会跟着发生变化-->
+<!--数据模型发生了改变，会直接显示在页面上-->
+<!--当视图发生变化的时候，数据也会跟着同步变化-->
+<!--用户在页面上的修改，会自动同步到数据模型中去-->
+<!--注意：v-model只用于用户交互组件中-->
+<div id="app">
+    <!--  v-bind:value 单向数据绑定  -->
+    <input type="text" v-bind:value="company">
+    <!--  v-model 双向数据绑定  -->
+    <input type="text" v-model="company">
+</div>
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            company: '尚硅谷',
+            site: 'http://www.atguigu.com'
+        }
+    })
+</script>
+</body>
+</html>

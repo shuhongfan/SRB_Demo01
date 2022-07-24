@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--
+计算属性缓存 vs 方法
+看起来计算属性和方法能完成相同的功能，那么他们有什么区别呢？
+计算属性基于缓存
+方法将总会再次执行
+-->
+<div id="app">
+    <p>原始值: {{ message }}</p>
+
+    <!-- 1、插值数据绑定中使用表达式 -->
+    <p>反转消息: {{ message.split('').reverse().join('') }}</p>
+
+    <!-- 2、使用计算属性 -->
+    <!-- 调用两次只执行一次属性的计算 -->
+    <p>反转消息: {{ reversedMessage }}</p>
+    <p>反转消息: {{ reversedMessage }}</p>
+    <p>反转消息: {{ reversedMessage }}</p>
+
+    <!-- 3、使用方法 -->
+    <!-- 调用两次执行了两次属性的计算 -->
+    <p>反转消息: {{ reversed() }}</p>
+    <p>反转消息: {{ reversed() }}</p>
+    <p>反转消息: {{ reversed() }}</p>
+</div>
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'hello',
+        },
+        computed:{
+            reversedMessage() {
+                console.log("计算属性执行");
+                return this.message.split('').reverse().join('')
+            },
+        },
+        methods:{
+            reversed () {
+                console.log('方法执行')
+                return this.message.split('').reverse().join('')
+            }
+        }
+    })
+</script>
+</body>
+</html>
