@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '尚融宝管理平台',
 
   /**
    * @type {boolean} true | false

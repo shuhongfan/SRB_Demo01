@@ -1,0 +1,2 @@
+2022/07/24 17:33:41 [notice] 6596#8380: signal process started
+2022/07/24 17:34:45 [error] 20176#7412: *1 CreateFile() "C:\Users\shf\Documents\CODE\SRB_Demo01\nginx-1.22.0/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:88", referrer: "http://localhost:88/"

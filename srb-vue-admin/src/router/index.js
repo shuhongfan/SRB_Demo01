@@ -45,7 +45,7 @@ export const constantRoutes = [
 
   {
     path: '/',
-    component: Layout,
+    component: Layout, // 这个组件应用了Layout布局文件
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
@@ -53,6 +53,36 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
+  },
+
+  {
+    path: '/core/integral-grade',
+    component: Layout,
+    redirect: '/core/integral-grade/list',
+    name: 'coreIntegralGrade',
+    meta: { title: '积分等级管理', icon: 'el-icon-s-marketing' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'list',
+        name: 'coreIntegralGradeList',
+        component: () => import('@/views/core/integral-grade/list'),
+        meta: { title: '积分等级列表' }
+      },
+      {
+        path: 'create',
+        name: 'coreIntegralGradeCreate',
+        component: () => import('@/views/core/integral-grade/form'),
+        meta: { title: '新增积分等级' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'coreIntegralGradeEdit',
+        component: () => import('@/views/core/integral-grade/form'),
+        meta: { title: '编辑积分等级' },
+        hidden: true
+      }
+    ]
   },
 
   {

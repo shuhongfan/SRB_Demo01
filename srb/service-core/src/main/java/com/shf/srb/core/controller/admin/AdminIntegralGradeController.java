@@ -35,6 +35,7 @@ public class AdminIntegralGradeController {
     @ApiOperation(value = "积分等级表")
     @GetMapping("/list")
     public R listAll() {
+
         log.info("hi this is log info");
         log.warn("hi this is log warn");
         log.error("hi this is log error");
@@ -86,7 +87,8 @@ public class AdminIntegralGradeController {
 
     @ApiOperation("更新积分等级")
     @PutMapping("/update")
-    public R updateById(@ApiParam(value = "积分等级对象", required = true) @RequestBody IntegralGrade integralGrade) {
+    public R updateById(@ApiParam(value = "积分等级对象", required = true)
+                            @RequestBody IntegralGrade integralGrade) {
         boolean res = integralGradeService.updateById(integralGrade);
         if (res) {
             return R.ok().message("更新成功");
