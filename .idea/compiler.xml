@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
         <module name="service-core" />
+        <module name="alibaba-easyexcel" />
       </profile>
     </annotationProcessing>
   </component>
