@@ -7,12 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="common" />
+        <module name="jwt" />
+        <module name="alibaba-easyexcel" />
         <module name="service-core" />
         <module name="service-oss" />
-        <module name="common" />
         <module name="service-sms" />
         <module name="aliyun-oss" />
-        <module name="alibaba-easyexcel" />
       </profile>
     </annotationProcessing>
   </component>
