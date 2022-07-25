@@ -8,8 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="service-core" />
+        <module name="service-oss" />
         <module name="common" />
         <module name="service-sms" />
+        <module name="aliyun-oss" />
         <module name="alibaba-easyexcel" />
       </profile>
     </annotationProcessing>
@@ -20,6 +22,7 @@
       <module name="mybatis-plus" options="-parameters" />
       <module name="service-base" options="-parameters" />
       <module name="service-core" options="-parameters" />
+      <module name="service-oss" options="-parameters" />
       <module name="service-sms" options="-parameters" />
     </option>
   </component>
