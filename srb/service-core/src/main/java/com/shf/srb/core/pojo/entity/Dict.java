@@ -21,13 +21,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Dict对象", description="数据字典")
+@ApiModel(value = "Dict对象", description = "数据字典")
 public class Dict implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "id")
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "上级id")
@@ -53,5 +53,7 @@ public class Dict implements Serializable {
     @TableLogic
     private Boolean deleted;
 
-
+    @ApiModelProperty(value = "是否包含子节点")
+    @TableField(exist = false) // 在数据表中忽略此列
+    private boolean hasChildren;
 }
