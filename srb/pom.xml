@@ -6,6 +6,7 @@
 		<module>common</module>
 		<module>service-base</module>
         <module>service-core</module>
+        <module>service-sms</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
