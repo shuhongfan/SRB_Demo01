@@ -7,19 +7,19 @@
         <ul>
           <li>
             <span class="dis"></span>
-            <input v-model="userInfo.userType" type="radio" value="1" />
+            <input v-model="userInfo.userType" type="radio" value="1"/>
             投资人
-            <input v-model="userInfo.userType" type="radio" value="2" />
+            <input v-model="userInfo.userType" type="radio" value="2"/>
             借款人
           </li>
           <li>
             <span class="dis">手机号：</span>
-            <input class="input" v-model="userInfo.mobile" />
+            <input class="input" v-model="userInfo.mobile"/>
           </li>
 
           <li>
             <span class="dis">密码：</span>
-            <input class="input" v-model="userInfo.password" type="password" />
+            <input class="input" v-model="userInfo.password" type="password"/>
           </li>
           <li class="btn">
             <button @click="login()" :class="{ disabled: !isValid }">
@@ -48,7 +48,23 @@ export default {
 
   methods: {
     //登录
-    login() {},
+    async login() {
+      if (!this.userInfo.mobile) {
+        this.$message.error('请输入手机号码')
+        return
+      }
+
+      if (!this.userInfo.password) {
+        this.$message.error('请输入密码')
+        return
+      }
+
+      let res = await this.$axios.$post(`/api/core/userInfo/login`, this.userInfo);
+      if (res.code === 0) {
+        cookie.set('userInfo', res.data.userInfo)
+        window.location.href = '/user'
+      }
+    },
   },
 }
 </script>

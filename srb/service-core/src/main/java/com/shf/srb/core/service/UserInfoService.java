@@ -2,7 +2,9 @@ package com.shf.srb.core.service;
 
 import com.shf.srb.core.pojo.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shf.srb.core.pojo.vo.LoginVO;
 import com.shf.srb.core.pojo.vo.RegisterVO;
+import com.shf.srb.core.pojo.vo.UserInfoVO;
 
 /**
  * <p>
@@ -19,4 +21,12 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param registerVO
      */
     void register(RegisterVO registerVO);
+
+    /**
+     * 会员登录
+     * @param loginVO
+     * @param ip
+     * @return
+     */
+    UserInfoVO login(LoginVO loginVO, String ip);
 }

@@ -4,11 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shf.common.exception.Assert;
 import com.shf.common.result.ResponseEnum;
 import com.shf.common.util.MD5;
+import com.shf.srb.base.util.JwtUtils;
 import com.shf.srb.core.mapper.UserAccountMapper;
+import com.shf.srb.core.mapper.UserLoginRecordMapper;
 import com.shf.srb.core.pojo.entity.UserAccount;
 import com.shf.srb.core.pojo.entity.UserInfo;
 import com.shf.srb.core.mapper.UserInfoMapper;
+import com.shf.srb.core.pojo.entity.UserLoginRecord;
+import com.shf.srb.core.pojo.vo.LoginVO;
 import com.shf.srb.core.pojo.vo.RegisterVO;
+import com.shf.srb.core.pojo.vo.UserInfoVO;
 import com.shf.srb.core.service.UserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -30,6 +35,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private UserAccountMapper userAccountMapper;
 
+    @Resource
+    private UserLoginRecordMapper userLoginRecordMapper;
     /**
      * 会员注册
      *
@@ -60,5 +67,48 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserAccount userAccount = new UserAccount();
         userAccount.setUserId(userInfo.getId());
         userAccountMapper.insert(userAccount);
+    }
+
+    /**
+     * 会员登录
+     * @param loginVO
+     * @param ip
+     * @return
+     */
+    @Override
+    public UserInfoVO login(LoginVO loginVO, String ip) {
+        String mobile = loginVO.getMobile();
+        String password = loginVO.getPassword();
+        Integer userType = loginVO.getUserType();
+
+//        获取会员
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("mobile", mobile);
+        wrapper.eq("user_type", userType);
+        UserInfo userInfo = baseMapper.selectOne(wrapper);
+
+//        LOGIN_MOBILE_ERROR(208, "用户不存在")
+        Assert.notNull(userInfo,ResponseEnum.LOGIN_MOBILE_ERROR);
+//        LOGIN_PASSWORD_ERROR(209, "密码错误"),
+        Assert.equals(MD5.encrypt(password), userInfo.getPassword(), ResponseEnum.LOGIN_PASSWORD_ERROR);
+//        LOGIN_LOKED_ERROR(210, "用户被锁定"),
+        Assert.equals(userInfo.getStatus(), UserInfo.STATUS_NORMAL, ResponseEnum.LOGIN_LOKED_ERROR);
+
+//        记录登录日志
+        UserLoginRecord userLoginRecord = new UserLoginRecord();
+        userLoginRecord.setUserId(userInfo.getId());
+        userLoginRecord.setIp(ip);
+        userLoginRecordMapper.insert(userLoginRecord);
+
+//        生成token
+        String token = JwtUtils.createToken(userInfo.getId(), userInfo.getName());
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setToken(token);
+        userInfoVO.setName(userInfo.getNickName());
+        userInfoVO.setNickName(userInfo.getNickName());
+        userInfoVO.setHeadImg(userInfo.getHeadImg());
+        userInfoVO.setMobile(userInfo.getMobile());
+        userInfoVO.setUserType(userType);
+        return userInfoVO;
     }
 }

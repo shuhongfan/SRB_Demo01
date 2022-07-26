@@ -27,14 +27,15 @@
           <!-- <li><a href="" :class="'c-orange'">测试</a></li> -->
           <li>
             <NuxtLink to="/" :class="{ 'c-orange': $route.fullPath === '/' }"
-              >返回首页</NuxtLink
+            >返回首页
+            </NuxtLink
             >
           </li>
           <li>
             <div class="">
               <NuxtLink
-                to="/register"
-                :class="{ 'c-orange': $route.fullPath === '/register' }"
+                  to="/register"
+                  :class="{ 'c-orange': $route.fullPath === '/register' }"
               >
                 免费注册
               </NuxtLink>
@@ -43,8 +44,8 @@
           <li>
             <div class="">
               <NuxtLink
-                to="/login"
-                :class="{ 'c-orange': $route.fullPath === '/login' }"
+                  to="/login"
+                  :class="{ 'c-orange': $route.fullPath === '/login' }"
               >
                 登录
               </NuxtLink>
@@ -54,7 +55,9 @@
 
         <!-- 用户已登录 -->
         <ul v-if="userInfo" class="fn-right header-top-ul">
-          <li><NuxtLink to="/" class="app">返回首页</NuxtLink></li>
+          <li>
+            <NuxtLink to="/" class="app">返回首页</NuxtLink>
+          </li>
           <li>
             <div class="">
               <NuxtLink to="/user" class="user" title="我的账户">
@@ -65,10 +68,10 @@
           <li>
             <div class="">
               <a
-                href="javascript:void(0)"
-                class="js-login"
-                @click="logout()"
-                title="退出"
+                  href="javascript:void(0)"
+                  class="js-login"
+                  @click="logout()"
+                  title="退出"
               >
                 退出
               </a>
@@ -81,7 +84,7 @@
       <div class="container">
         <div class="fn-left logo">
           <NuxtLink to="/">
-            <img src="~/assets/images/logo.png" title="" />
+            <img src="~/assets/images/logo.png" title=""/>
           </NuxtLink>
         </div>
         <ul class="top-nav fn-clear">
@@ -89,7 +92,7 @@
             <NuxtLink to="/">首页</NuxtLink>
           </li>
           <li :class="{ on: $route.fullPath === '/list' }">
-            <NuxtLink to="/lend"> 我要投资 </NuxtLink>
+            <NuxtLink to="/lend"> 我要投资</NuxtLink>
           </li>
           <li :class="{ on: $route.fullPath === '/help' }">
             <NuxtLink to="/help">安全保障</NuxtLink>
@@ -119,10 +122,37 @@ export default {
 
   methods: {
     //显示用户信息
-    showInfo() {},
+    async showInfo() {
+      var userInfo = cookie.get('userInfo');
+      if (!userInfo) {
+        console.log('cookie不存在')
+        this.userInfo = null
+        return
+      }
+      userInfo = JSON.parse(userInfo);
+      this.userInfo = userInfo;
+
+      // let res = await this.$axios(
+      //     {
+      //       url: '/api/core/userInfo/checkToken',
+      //       method: 'get',
+      //       headers: {
+      //         token: userInfo.token
+      //       }
+      //     }
+      // );
+      // if (res.code === 0) {
+      //   console.log('校验成功')
+      //   this.userInfo = userInfo;
+      // }
+    },
 
     //退出
-    logout() {},
+    logout() {
+      cookie.set('userInfo', '');
+      // 跳转页面
+      window.location.href = '/login'
+    },
   },
 }
 </script>

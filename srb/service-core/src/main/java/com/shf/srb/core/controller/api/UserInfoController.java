@@ -5,7 +5,10 @@ import com.shf.common.exception.Assert;
 import com.shf.common.result.R;
 import com.shf.common.result.ResponseEnum;
 import com.shf.common.util.RegexValidateUtils;
+import com.shf.srb.base.util.JwtUtils;
+import com.shf.srb.core.pojo.vo.LoginVO;
 import com.shf.srb.core.pojo.vo.RegisterVO;
+import com.shf.srb.core.pojo.vo.UserInfoVO;
 import com.shf.srb.core.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -63,5 +67,35 @@ public class UserInfoController {
         return R.ok().message("注册成功");
     }
 
+    @ApiOperation("会员登录")
+    @PostMapping("/login")
+    public R login(@RequestBody LoginVO loginVO, HttpServletRequest request) {
+        String mobile = loginVO.getMobile();
+        String password = loginVO.getPassword();
+
+//        MOBILE_NULL_ERROR(-202, "手机号码不能为空"),
+        Assert.notEmpty(mobile, ResponseEnum.MOBILE_NULL_ERROR);
+//        PASSWORD_NULL_ERROR(204, "密码不能为空"),
+        Assert.notEmpty(password, ResponseEnum.PASSWORD_NULL_ERROR);
+
+        String ip = request.getRemoteAddr();
+        UserInfoVO userInfoVO = userInfoService.login(loginVO, ip);
+
+        return R.ok().data("userInfo", userInfoVO);
+    }
+
+    @ApiOperation("校验令牌")
+    @GetMapping("/checkToken")
+    public R checkToken(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        boolean result = JwtUtils.checkToken(token);
+
+        if (result) {
+            return R.ok();
+        } else {
+//            LOGIN_AUTH_ERROR(-211, "未登录"),
+            return R.setResult(ResponseEnum.LOGIN_AUTH_ERROR);
+        }
+    }
 }
 
