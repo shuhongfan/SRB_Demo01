@@ -23,7 +23,6 @@ import java.util.List;
  */
 @Api(tags = "会员登录日志接口")
 @RestController
-@CrossOrigin
 @RequestMapping("/admin/core/userLoginRecord")
 @Slf4j
 public class AdminUserLoginRecordController {
