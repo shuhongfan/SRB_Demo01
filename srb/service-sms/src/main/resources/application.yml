@@ -20,6 +20,21 @@ spring:
         max-wait: -1    #最大阻塞等待时间，负值表示没限制，默认-1
         max-idle: 8     #最大空闲连接，默认8
         min-idle: 0     #最小空闲连接，默认0
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.120.20:8848 # nacos服务地址
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000 #连接超时配置
+        readTimeout: 600000 #执行超时配置
+  sentinel:
+    enabled: true #开启Feign对Sentinel的支持
+logging:
+  level:
+    com.shf.srb.sms.client.CoreUserInfoClient: DEBUG #以什么级别监控哪个接口
 
 #阿里云短信
 aliyun:

@@ -73,7 +73,7 @@
 
     <!-- 开发环境和测试环境 -->
     <springProfile name="dev,test">
-        <logger name="com.shf" level="INFO">
+        <logger name="com.shf" level="DEBUG">
             <appender-ref ref="CONSOLE" />
         </logger>
     </springProfile>

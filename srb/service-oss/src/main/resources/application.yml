@@ -6,7 +6,10 @@ spring:
     active: dev # 环境设置
   application:
     name: service-oss # 服务名
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.120.20:8848 # nacos服务地址
 aliyun:
   oss:
     endpoint: oss-cn-hangzhou.aliyuncs.com

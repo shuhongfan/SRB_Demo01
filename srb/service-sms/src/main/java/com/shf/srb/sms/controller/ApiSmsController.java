@@ -5,6 +5,7 @@ import com.shf.common.result.R;
 import com.shf.common.result.ResponseEnum;
 import com.shf.common.util.RandomUtils;
 import com.shf.common.util.RegexValidateUtils;
+import com.shf.srb.sms.client.CoreUserInfoClient;
 import com.shf.srb.sms.service.SmsService;
 import com.shf.srb.sms.util.SmsProperties;
 import io.swagger.annotations.Api;
@@ -30,6 +31,9 @@ public class ApiSmsController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    @Resource
+    private CoreUserInfoClient coreUserInfoClient;
+
     @ApiOperation("获取验证码")
     @GetMapping("/send/{mobile}")
     public R send(@ApiParam(value = "手机号", required = true)
@@ -38,6 +42,11 @@ public class ApiSmsController {
         Assert.notEmpty(mobile, ResponseEnum.MOBILE_NULL_ERROR);
         //MOBILE_ERROR(-203, "手机号不正确"),
         Assert.isTrue(RegexValidateUtils.checkCellphone(mobile),ResponseEnum.MOBILE_ERROR);
+
+//        判断手机号是否已经注册
+        boolean isExist = coreUserInfoClient.checkMobile(mobile);
+//        MOBILE_EXIST_ERROR(207, "手机号已被注册"),
+        Assert.isTrue(!isExist, ResponseEnum.MOBILE_EXIST_ERROR);
 
 //        生成验证码
         String code = RandomUtils.getFourBitRandom();

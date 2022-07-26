@@ -144,6 +144,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     /**
      * 锁定和解锁
+     *
      * @param id
      * @param status
      */
@@ -154,6 +155,21 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfo.setStatus(status);
 
         baseMapper.updateById(userInfo);
+    }
+
+    /**
+     * 校验手机号是否注册
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    public Boolean checkMobile(String mobile) {
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("mobile", mobile);
+
+        Integer count = baseMapper.selectCount(wrapper);
+        return count > 0;
     }
 
 }
