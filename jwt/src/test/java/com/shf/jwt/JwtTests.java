@@ -59,11 +59,11 @@ public class JwtTests {
         String avatar = (String) claims.get("avatar");
         String role = (String) claims.get("role");
 
-        System.out.println(nickname);
-        System.out.println(avatar);
-        System.out.println(role);
+        System.out.println(nickname); // shuhongfan
+        System.out.println(avatar); // 1.jpg
+        System.out.println(role); // srb_user
 
-        String id = claims.getId();
+        String id = claims.getId(); // 43dc07dd-e351-44c8-b019-b6658599fa7f
         System.out.println(id);
     }
 }
