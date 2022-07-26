@@ -1,6 +1,9 @@
 package com.shf.srb.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shf.common.exception.Assert;
 import com.shf.common.result.ResponseEnum;
 import com.shf.common.util.MD5;
@@ -11,6 +14,7 @@ import com.shf.srb.core.pojo.entity.UserAccount;
 import com.shf.srb.core.pojo.entity.UserInfo;
 import com.shf.srb.core.mapper.UserInfoMapper;
 import com.shf.srb.core.pojo.entity.UserLoginRecord;
+import com.shf.srb.core.pojo.query.UserInfoQuery;
 import com.shf.srb.core.pojo.vo.LoginVO;
 import com.shf.srb.core.pojo.vo.RegisterVO;
 import com.shf.srb.core.pojo.vo.UserInfoVO;
@@ -37,6 +41,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Resource
     private UserLoginRecordMapper userLoginRecordMapper;
+
     /**
      * 会员注册
      *
@@ -50,7 +55,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         wrapper.eq("mobile", registerVO.getMobile());
         Integer count = baseMapper.selectCount(wrapper);
 //        MOBILE_EXIST_ERROR(207, "手机号已被注册"),
-        Assert.isTrue(count==0, ResponseEnum.MOBILE_EXIST_ERROR);
+        Assert.isTrue(count == 0, ResponseEnum.MOBILE_EXIST_ERROR);
 
 //        插入用户基本信息 user_info
         UserInfo userInfo = new UserInfo();
@@ -71,6 +76,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     /**
      * 会员登录
+     *
      * @param loginVO
      * @param ip
      * @return
@@ -88,7 +94,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo userInfo = baseMapper.selectOne(wrapper);
 
 //        LOGIN_MOBILE_ERROR(208, "用户不存在")
-        Assert.notNull(userInfo,ResponseEnum.LOGIN_MOBILE_ERROR);
+        Assert.notNull(userInfo, ResponseEnum.LOGIN_MOBILE_ERROR);
 //        LOGIN_PASSWORD_ERROR(209, "密码错误"),
         Assert.equals(MD5.encrypt(password), userInfo.getPassword(), ResponseEnum.LOGIN_PASSWORD_ERROR);
 //        LOGIN_LOKED_ERROR(210, "用户被锁定"),
@@ -111,4 +117,43 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfoVO.setUserType(userType);
         return userInfoVO;
     }
+
+    /**
+     * 获取会员分页列表
+     *
+     * @param pageParam
+     * @param userInfoQuery
+     * @return
+     */
+    @Override
+    public IPage<UserInfo> listPage(Page<UserInfo> pageParam, UserInfoQuery userInfoQuery) {
+        if (userInfoQuery == null) {
+            return baseMapper.selectPage(pageParam, null);
+        }
+
+        String mobile = userInfoQuery.getMobile();
+        Integer status = userInfoQuery.getStatus();
+        Integer userType = userInfoQuery.getUserType();
+
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq(StringUtils.isNotBlank(mobile), "mobile", mobile)
+                .eq(status != null, "status", status)
+                .eq(userType != null, "user_yupe", userType);
+        return baseMapper.selectPage(pageParam, wrapper);
+    }
+
+    /**
+     * 锁定和解锁
+     * @param id
+     * @param status
+     */
+    @Override
+    public void lock(Long id, Integer status) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(id);
+        userInfo.setStatus(status);
+
+        baseMapper.updateById(userInfo);
+    }
+
 }

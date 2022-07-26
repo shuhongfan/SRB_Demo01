@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import dict from "@/api/dict";
+import dict from "@/api/core/dict";
 
 export default {
   // 定义数据

@@ -97,5 +97,7 @@ public class UserInfoController {
             return R.setResult(ResponseEnum.LOGIN_AUTH_ERROR);
         }
     }
+
+
 }
 

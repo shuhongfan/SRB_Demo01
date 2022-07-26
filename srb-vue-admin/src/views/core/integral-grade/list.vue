@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import core from "@/api/core";
+import core from "@/api/core/core";
 
 export default {
   name: 'list',
