@@ -2,6 +2,9 @@ package com.shf.srb.core.service;
 
 import com.shf.srb.core.pojo.entity.BorrowerAttach;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shf.srb.core.pojo.vo.BorrowerAttachVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BorrowerAttachService extends IService<BorrowerAttach> {
 
+    /**
+     * 根据id获取附件VO列表
+     * @param id
+     * @return
+     */
+    List<BorrowerAttachVO> selectBorrowerAttachVOList(Long id);
 }

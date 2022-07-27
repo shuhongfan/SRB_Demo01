@@ -133,6 +133,35 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     /**
+     * 根据dict_code获取parent_id，根据parent_id和value得到name值
+     * @param dictCode
+     * @param value
+     * @return
+     */
+    @Override
+    public String getNameByParentDictCodeAndValue(String dictCode, Integer value) {
+        QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
+        dictQueryWrapper.eq("dict_code", dictCode);
+        Dict parentDict = baseMapper.selectOne(dictQueryWrapper);
+
+        if (parentDict == null) {
+            return "";
+        }
+
+        dictQueryWrapper = new QueryWrapper<>();
+        dictQueryWrapper
+                .eq("parent_id", parentDict.getId())
+                .eq("value", value);
+
+        Dict dict = baseMapper.selectOne(dictQueryWrapper);
+
+        if (dict == null) {
+            return "";
+        }
+        return dict.getName();
+    }
+
+    /**
      * 判断当前id所在的节点是否有子节点
      *
      * @param id

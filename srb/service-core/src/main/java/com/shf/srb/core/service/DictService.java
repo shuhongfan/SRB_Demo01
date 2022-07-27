@@ -41,4 +41,12 @@ public interface DictService extends IService<Dict> {
      * @return
      */
     List<Dict> findByDictCode(String dictCode);
+
+    /**
+     * 根据dict_code获取parent_id，根据parent_id和value得到name值
+     * @param dictCode
+     * @param value
+     * @return
+     */
+    String getNameByParentDictCodeAndValue(String dictCode, Integer value);
 }
