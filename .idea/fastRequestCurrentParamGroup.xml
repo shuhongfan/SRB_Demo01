@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="fastRequestCurrentParamGroup">
+    <option name="className" value="com.shf.srb.core.controller.api.UserBindController" />
+    <option name="method" value="notify" />
+    <option name="methodDescription" value="账户绑定异步回调" />
+    <option name="methodType" value="POST" />
+    <option name="module" value="service-core" />
+  </component>
+</project>

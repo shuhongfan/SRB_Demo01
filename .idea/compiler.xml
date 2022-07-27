@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="service-gateway" />
         <module name="common" />
+        <module name="hfb" />
         <module name="jwt" />
         <module name="alibaba-easyexcel" />
         <module name="service-core" />
