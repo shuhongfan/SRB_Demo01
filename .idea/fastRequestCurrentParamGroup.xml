@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="fastRequestCurrentParamGroup">
-    <option name="className" value="com.shf.srb.core.controller.api.UserBindController" />
-    <option name="method" value="notify" />
-    <option name="methodDescription" value="账户绑定异步回调" />
-    <option name="methodType" value="POST" />
+    <option name="className" value="com.shf.srb.core.controller.admin.AdminBorrowInfoController" />
+    <option name="method" value="list" />
+    <option name="methodDescription" value="借款信息列表" />
     <option name="module" value="service-core" />
+    <option name="pathParamMap">
+      <map>
+        <entry key="limit">
+          <value>
+            <Object />
+          </value>
+        </entry>
+        <entry key="page">
+          <value>
+            <Object />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="requestParamMap">
+      <map>
+        <entry key="keyword">
+          <value>
+            <Object />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

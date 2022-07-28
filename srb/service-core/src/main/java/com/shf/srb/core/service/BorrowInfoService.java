@@ -1,9 +1,14 @@
 package com.shf.srb.core.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shf.srb.core.pojo.entity.BorrowInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shf.srb.core.pojo.vo.BorrowInfoApprovalVO;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,4 +40,26 @@ public interface BorrowInfoService extends IService<BorrowInfo> {
      * @return
      */
     Integer getStatusByUserId(Long userId);
+
+
+    /**
+     * 借款信息列表
+     * @param borrowInfoParam
+     * @param keyword
+     * @return
+     */
+    IPage<BorrowInfo> listPage(Page<BorrowInfo> borrowInfoParam, String keyword);
+
+    /**
+     * 获取借款信息
+     * @param id
+     * @return
+     */
+    Map<String, Object> getBorrowInfoDetail(Long id);
+
+    /**
+     * 审批借款人信息
+     * @param borrowInfoApprovalVO
+     */
+    void approval(BorrowInfoApprovalVO borrowInfoApprovalVO);
 }

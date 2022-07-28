@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shf.srb.core.mapper.BorrowInfoMapper">
-
+    <select id="selectBorrowInfoList" resultType="com.shf.srb.core.pojo.entity.BorrowInfo">
+        SELECT bi.*,
+               b.name   as name,
+               b.mobile as mobile
+        FROM borrow_info AS bi
+                 LEFT JOIN borrower AS b ON bi.user_id = b.user_id
+        where b.is_deleted = 0
+        <if test="keyword != null">
+            and name like #{keyword} or mobile like #{keyword}
+        </if>
+    </select>
 </mapper>
