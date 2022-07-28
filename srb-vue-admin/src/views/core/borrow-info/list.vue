@@ -3,7 +3,7 @@
     <!--查询表单-->
     <el-form :inline="true">
       <el-form-item label="关键字">
-        <el-input clearable v-model="keyword" placeholder="姓名/手机"/>
+        <el-input clearable v-model="keyword" placeholder="标的编号/标的金额"/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">
         查询

@@ -22,6 +22,7 @@ import com.shf.srb.core.service.BorrowInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shf.srb.core.service.BorrowerService;
 import com.shf.srb.core.service.DictService;
+import com.shf.srb.core.service.LendService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -58,6 +59,10 @@ public class BorrowInfoServiceImpl extends ServiceImpl<BorrowInfoMapper, BorrowI
 
     @Resource
     private BorrowerService borrowerService;
+
+    @Resource
+    private LendService lendService;
+
 
     /**
      * 获取借款额度
@@ -226,7 +231,7 @@ public class BorrowInfoServiceImpl extends ServiceImpl<BorrowInfoMapper, BorrowI
 //        如果审核通过，则创建标的记录 lend
         if (borrowInfoApprovalVO.getStatus().intValue() == BorrowInfoStatusEnum.CHECK_OK.getStatus().intValue()) {
 //            创建标的
-
+            lendService.createLend(borrowInfoApprovalVO, borrowInfo);
         }
     }
 }
