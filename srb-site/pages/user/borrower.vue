@@ -200,6 +200,12 @@
           >
           </el-alert>
         </div>
+
+        <NuxtLink to="/user/apply" v-if="borrowerStatus === 2">
+          <el-button style="margin-top:20px;" type="success">
+            我要借款
+          </el-button>
+        </NuxtLink>
       </div>
     </div>
   </div>

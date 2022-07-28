@@ -22,8 +22,8 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common" options="-parameters" />
-      <module name="mybatis-plus" options="-parameters" />
-      <module name="service-base" options="-parameters" />
+      <module name="mybatis-plus" options="" />
+      <module name="service-base" options="" />
       <module name="service-core" options="-parameters" />
       <module name="service-gateway" options="-parameters" />
       <module name="service-oss" options="-parameters" />
