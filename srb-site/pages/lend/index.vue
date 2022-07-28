@@ -305,6 +305,18 @@
             </ul>
           </div>
           <!------------投资列表-------------->
+          <!-- 分页组件 -->
+          <el-pagination
+              align="center"
+              :current-page="page"
+              :total="total"
+              :page-size="limit"
+              :page-sizes="[2, 10, 20]"
+              style="padding: 30px 0; "
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="changePageSize"
+              @current-change="changeCurrentPage"
+          />
         </div>
       </div>
     </div>
@@ -315,6 +327,39 @@
 import '~/assets/css/index.css'
 import '~/assets/css/detail.css'
 export default {
-  async asyncData({ $axios }) {},
+  async asyncData({ $axios }) {
+    let res = await $axios.$get(`/api/core/lend/list/0/10?keyword=`)
+    return{
+      lendList: res.data.pageModel.records,
+      total: 0, // 数据库中的总记录数
+      page: 1, // 默认页码
+      limit: 10, // 每页记录数
+      keyword: '', // 查询表单对象
+    }
+  },
+  methods:{
+    async fetchData() {
+      let res = await this.$axios.$get(`/api/core/lend/list/${this.page}/${this.limit}?keyword=${this.keyword}`)
+      if (res.code === 0) {
+        this.list = res.data.pageModel.records
+        this.total = res.data.pageModel.total
+      }
+    },
+    // 每页记录数改变，size：回调参数，表示当前选中的“每页条数”
+    changePageSize(size) {
+      this.limit = size
+      this.fetchData()
+    },
+    // 改变页码，page：回调参数，表示当前选中的“页码”
+    changeCurrentPage(page) {
+      this.page = page
+      this.fetchData()
+    },
+    // 重置表单
+    resetData() {
+      this.keyword = ''
+      this.fetchData()
+    },
+  }
 }
 </script>
