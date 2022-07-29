@@ -59,5 +59,28 @@ export default {
       chargeAmt: 0,
     }
   },
+  methods:{
+    commitCharge() {
+      this.$alert(
+          '<div style="size: 18px;color: red;">您即将前往汇付宝充值</div>',
+          '前往汇付宝资金托管平台',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '立即前往',
+            callback: (action) => {
+              if (action === 'confirm') {
+                this.$axios
+                    .$post(
+                        '/api/core/userAccount/auth/commitCharge/' + this.chargeAmt
+                    )
+                    .then((response) => {
+                      document.write(response.data.formStr)
+                    })
+              }
+            },
+          }
+      )
+    },
+  }
 }
 </script>

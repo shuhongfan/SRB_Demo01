@@ -1,5 +1,6 @@
 package com.shf.srb.core.service;
 
+import com.shf.srb.core.pojo.bo.TransFlowBO;
 import com.shf.srb.core.pojo.entity.TransFlow;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TransFlowService extends IService<TransFlow> {
 
+    /**
+     * 增加交易流水
+     * @param transFlowBO
+     */
+    void saveTransFlow(TransFlowBO transFlowBO);
+
+    /**
+     * 判断交易流水是否存在
+     * @param agentBillNo
+     * @return
+     */
+    boolean isSaveTransFlow(String agentBillNo);
 }

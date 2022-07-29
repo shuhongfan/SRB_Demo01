@@ -59,10 +59,13 @@ public class UserAccountController {
 	public String recharge(Model model,HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Map<String, Object> paramMap = SignUtil.switchMap(request.getParameterMap());
 
+//		校验支付密码
 		userBindService.checkPassword((String)paramMap.get("bindCode"), request.getParameter("payPasswd"));
 
+//		汇付宝账户充值
 		userAccountService.recharge(paramMap);
 
+//		组装回调请求参数
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("resultCode","0001");
 		resultMap.put("resultMsg","充值成功");
