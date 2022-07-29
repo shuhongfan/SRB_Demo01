@@ -35,6 +35,6 @@ mybatis-plus: #mybatis
   mapper-locations: classpath:com/shf/srb/core/mapper/xml/*.xml
 
 # 设置日志级别
-#logging:
-#  level:
-#    root: ERROR
+logging:
+  level:
+    root: info

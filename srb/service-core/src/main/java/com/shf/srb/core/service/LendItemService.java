@@ -33,8 +33,15 @@ public interface LendItemService extends IService<LendItem> {
     /**
      * 根据lendId获取投资记录
      * @param lendId
-     * @param i
+     * @param status
      * @return
      */
-    List<LendItem> selectByLendId(Long lendId, int i);
+    List<LendItem> selectByLendId(Long lendId, int status);
+
+    /**
+     * 获取标的列表
+     * @param lendId
+     * @return
+     */
+    List<LendItem> selectByLendId(Long lendId);
 }

@@ -16,5 +16,11 @@ import java.math.BigDecimal;
  */
 public interface UserAccountMapper extends BaseMapper<UserAccount> {
 
+    /**
+     * 转账
+     * @param bindCode
+     * @param amount
+     * @param freezeAmount
+     */
     void updateAccount(@Param("bindCode") String bindCode, @Param("amount") BigDecimal amount, @Param("freezeAmount") BigDecimal freezeAmount);
 }

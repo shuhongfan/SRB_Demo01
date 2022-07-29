@@ -202,7 +202,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
      * 根据lendId获取投资记录
      *
      * @param lendId
-     * @param i
+     * @param status
      * @return
      */
     @Override
@@ -211,6 +211,19 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
         lendItemQueryWrapper
                 .eq("lend_id", lendId)
                 .eq("status", status);
+        List<LendItem> lendItemList = baseMapper.selectList(lendItemQueryWrapper);
+        return lendItemList;
+    }
+
+    /**
+     * 获取标的列表
+     * @param lendId
+     * @return
+     */
+    @Override
+    public List<LendItem> selectByLendId(Long lendId) {
+        QueryWrapper<LendItem> lendItemQueryWrapper = new QueryWrapper<>();
+        lendItemQueryWrapper.eq("lend_id", lendId);
         List<LendItem> lendItemList = baseMapper.selectList(lendItemQueryWrapper);
         return lendItemList;
     }

@@ -54,7 +54,7 @@ public interface LendService extends IService<Lend> {
 
     /**
      * 放款
-     * @param id
+     * @param lendId
      */
-    void makeLoan(Long id);
+    void makeLoan(Long lendId);
 }

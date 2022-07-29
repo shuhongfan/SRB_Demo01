@@ -225,7 +225,13 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
     /**
      * 满标放款
      *
-     * @param id
+     * （1）标的状态和标的平台收益
+     * （2）给借款账号转入金额
+     * （3）增加借款交易流水
+     * （4）解冻并扣除投资人资金
+     * （5）增加投资人交易流水
+     * （6）生成借款人还款计划和出借人回款计划
+     * @param lendId
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -233,9 +239,9 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 //        获取标的信息
         Lend lend = baseMapper.selectById(lendId);
 
-        //放款接口调用
+        //调用汇付宝放款接口调用
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("agentId", HfbConst.AGENT_ID);
+        paramMap.put("agentId", HfbConst.AGENT_ID);//给商户分配的唯一标识
         paramMap.put("agentProjectCode", lend.getLendNo());//标的编号
         String agentBillNo = LendNoUtils.getLoanNo();//放款编号
         paramMap.put("agentBillNo", agentBillNo);
@@ -252,6 +258,7 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
         paramMap.put("sign", sign);
 
         log.info("放款参数：" + JSONObject.toJSONString(paramMap));
+
         //发送同步远程调用
         JSONObject result = RequestHelper.sendRequest(paramMap, HfbConst.MAKE_LOAD_URL);
         log.info("放款结果：" + result.toJSONString());
@@ -261,8 +268,9 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
             throw new BusinessException(result.getString("resultMsg"));
         }
 
-        //更新标的信息
-        lend.setRealAmount(realAmount);
+//        放款成功
+        //1.更新标的信息（标的的状态和标的的平台收益）
+        lend.setRealAmount(realAmount); // 平台收益
         lend.setStatus(LendStatusEnum.PAY_RUN.getStatus());
         lend.setPaymentTime(LocalDateTime.now());
         baseMapper.updateById(lend);
@@ -272,11 +280,11 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
         UserInfo userInfo = userInfoMapper.selectById(userId);
         String bindCode = userInfo.getBindCode();
 
-        //给借款账号转入金额
+        //2. 给借款账号转入金额
         BigDecimal total = new BigDecimal(result.getString("voteAmt"));
         userAccountMapper.updateAccount(bindCode, total, new BigDecimal(0));
 
-        //新增借款人交易流水
+        //3. 新增借款人交易流水
         TransFlowBO transFlowBO = new TransFlowBO(
                 agentBillNo,
                 bindCode,
@@ -287,18 +295,17 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 
         //获取投资列表信息
         List<LendItem> lendItemList = lendItemService.selectByLendId(lendId, 1); //根据lendId获取投资记录
-        lendItemList.stream().forEach(item -> {
-
+        lendItemList.forEach(item -> {
             //获取投资人信息
             Long investUserId = item.getInvestUserId();
             UserInfo investUserInfo = userInfoMapper.selectById(investUserId);
             String investBindCode = investUserInfo.getBindCode();
 
-            //投资人账号冻结金额转出
+            //4. 投资人账号冻结金额转出
             BigDecimal investAmount = item.getInvestAmount(); //投资金额
             userAccountMapper.updateAccount(investBindCode, new BigDecimal(0), investAmount.negate());
 
-            //新增投资人交易流水
+            //5. 新增投资人交易流水
             TransFlowBO investTransFlowBO = new TransFlowBO(
                     LendNoUtils.getTransNo(),
                     investBindCode,
@@ -308,7 +315,7 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
             transFlowService.saveTransFlow(investTransFlowBO);
         });
 
-        //放款成功生成借款人还款计划和投资人回款计划
+        //6. 放款成功生成借款人还款计划和投资人回款计划
         this.repaymentPlan(lend);
     }
 

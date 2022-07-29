@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SRB" type="CompoundRunConfigurationType">
+    <toRun name="srb-site" type="js.build_tools.npm" />
+    <toRun name="srb-vue-admin" type="js.build_tools.npm" />
+    <toRun name="ManageApplication" type="SpringBootApplicationConfigurationType" />
+    <toRun name="ServiceCoreApplication" type="SpringBootApplicationConfigurationType" />
+    <toRun name="ServiceGatewayApplication" type="SpringBootApplicationConfigurationType" />
+    <toRun name="ServiceOssApplication" type="SpringBootApplicationConfigurationType" />
+    <toRun name="ServiceSmsApplication" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
