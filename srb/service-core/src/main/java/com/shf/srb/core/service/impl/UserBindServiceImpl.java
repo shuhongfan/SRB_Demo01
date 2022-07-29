@@ -96,6 +96,7 @@ public class UserBindServiceImpl extends ServiceImpl<UserBindMapper, UserBind> i
 
     /**
      * 修改绑定状态
+     *
      * @param paramMap
      */
     @Override
@@ -121,5 +122,20 @@ public class UserBindServiceImpl extends ServiceImpl<UserBindMapper, UserBind> i
         userInfo.setIdCard(userBind.getIdCard());
         userInfo.setBindStatus(UserBindEnum.BIND_OK.getStatus());
         userInfoMapper.updateById(userInfo);
+    }
+
+    /**
+     * 根据userId获取用户绑定账号
+     *
+     * @param investUserId
+     * @return
+     */
+    @Override
+    public String getBindCodeByUserId(Long investUserId) {
+        QueryWrapper<UserBind> userBindQueryWrapper = new QueryWrapper<>();
+        userBindQueryWrapper.eq("user_id", investUserId);
+        UserBind userBind = baseMapper.selectOne(userBindQueryWrapper);
+        String bindCode = userBind.getBindCode();
+        return bindCode;
     }
 }

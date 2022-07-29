@@ -59,7 +59,7 @@ public class LendNoUtils {
     /**
      * 获取交易编码
      */
-    public static String getTransNo(Long userId, String str) {
+    public static String getTransNo() {
         return "TRANS" + getNo();
     }
 

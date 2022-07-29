@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shf.srb.core.enums.LendStatusEnum;
+import com.shf.srb.core.enums.ReturnMethodEnum;
 import com.shf.srb.core.mapper.BorrowerMapper;
 import com.shf.srb.core.pojo.entity.BorrowInfo;
 import com.shf.srb.core.pojo.entity.Borrower;
@@ -15,7 +16,7 @@ import com.shf.srb.core.service.BorrowerService;
 import com.shf.srb.core.service.DictService;
 import com.shf.srb.core.service.LendService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shf.srb.core.util.LendNoUtils;
+import com.shf.srb.core.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -162,5 +163,31 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
         result.put("borrower", borrowerDetailVO);
 
         return result;
+    }
+
+    /**
+     * 计算投资收益
+     * @param invest
+     * @param yearRate
+     * @param totalmonth
+     * @param returnMethod
+     * @return
+     */
+    @Override
+    public BigDecimal getInterestCount(BigDecimal invest, BigDecimal yearRate, Integer totalmonth, Integer returnMethod) {
+        BigDecimal interestCount;
+
+//        计算总利息
+        if (returnMethod.intValue() == ReturnMethodEnum.ONE.getMethod()) {
+            interestCount = Amount1Helper.getInterestCount(invest, yearRate, totalmonth);
+        } else if (returnMethod.intValue() == ReturnMethodEnum.TWO.getMethod()) {
+            interestCount = Amount2Helper.getInterestCount(invest, yearRate, totalmonth);
+        } else if (returnMethod.intValue() == ReturnMethodEnum.THREE.getMethod()) {
+            interestCount = Amount3Helper.getInterestCount(invest, yearRate, totalmonth);
+        } else {
+            interestCount = Amount4Helper.getInterestCount(invest, yearRate, totalmonth);
+        }
+
+        return interestCount;
     }
 }

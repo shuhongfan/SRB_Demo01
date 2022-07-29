@@ -1,6 +1,7 @@
 package com.shf.srb.core.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shf.common.exception.Assert;
 import com.shf.common.result.ResponseEnum;
 import com.shf.srb.core.enums.TransTypeEnum;
@@ -111,5 +112,21 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
         transFlowService.saveTransFlow(transFlowBO);
 
         return "success";
+    }
+
+    /**
+     * 查询账户余额
+     * @param userId
+     * @return
+     */
+    @Override
+    public BigDecimal getAccount(Long userId) {
+        QueryWrapper<UserAccount> userAccountQueryWrapper = new QueryWrapper<>();
+        userAccountQueryWrapper.eq("user_id", userId);
+
+//        根据userId查找用户账户
+        UserAccount userAccount = baseMapper.selectOne(userAccountQueryWrapper);
+        BigDecimal amount = userAccount.getAmount();
+        return amount;
     }
 }

@@ -29,4 +29,11 @@ public interface UserBindService extends IService<UserBind> {
      * @param paramMap
      */
     void notify(Map<String, Object> paramMap);
+
+    /**
+     * 根据userId获取用户绑定账号
+     * @param investUserId
+     * @return
+     */
+    String getBindCodeByUserId(Long investUserId);
 }
