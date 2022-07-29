@@ -4,6 +4,7 @@ import com.shf.srb.core.pojo.entity.LendItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.shf.srb.core.pojo.vo.InvestVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,4 +29,12 @@ public interface LendItemService extends IService<LendItem> {
      * @param paramMap
      */
     void notify(Map<String, Object> paramMap);
+
+    /**
+     * 根据lendId获取投资记录
+     * @param lendId
+     * @param i
+     * @return
+     */
+    List<LendItem> selectByLendId(Long lendId, int i);
 }

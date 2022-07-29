@@ -90,7 +90,7 @@ export default {
   methods: {
     // 加载列表数据
     async fetchData() {
-      let res = await lend.listPage(this.page,this.limit,this.keyword);
+      let res = await lend.listPage(this.page, this.limit, this.keyword);
       if (res.code === 0) {
         this.list = res.data.pageModel.records
       }
@@ -109,6 +109,33 @@ export default {
     resetData() {
       this.keyword = ''
       this.fetchData()
+    },
+    makeLoan(id) {
+      this.$confirm('确定放款吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          return lend.makeLoan(id)
+        })
+        .then(response => {
+          //放款成功则重新获取数据列表
+          this.fetchData()
+          this.$message({
+            type: 'success',
+            message: response.message
+          })
+        })
+        .catch(error => {
+          console.log('取消', error)
+          if (error === 'cancel') {
+            this.$message({
+              type: 'info',
+              message: '已取消放款'
+            })
+          }
+        })
     },
   }
 }

@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,6 +60,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
 
     /**
      * 会员投资提交数据
+     *
      * @param investVO
      * @return
      */
@@ -125,7 +127,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("agentId", HfbConst.AGENT_ID);
         paramMap.put("voteBindCode", bindCode);
-        paramMap.put("benefitBindCode",benefitBindCode);
+        paramMap.put("benefitBindCode", benefitBindCode);
         paramMap.put("agentProjectCode", lend.getLendNo());//项目标号
         paramMap.put("agentProjectName", lend.getTitle());
 
@@ -149,6 +151,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
 
     /**
      * 会员投资异步回调
+     *
      * @param paramMap
      */
     @Override
@@ -195,6 +198,29 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
         transFlowService.saveTransFlow(transFlowBO);
     }
 
+    /**
+     * 根据lendId获取投资记录
+     *
+     * @param lendId
+     * @param i
+     * @return
+     */
+    @Override
+    public List<LendItem> selectByLendId(Long lendId, int status) {
+        QueryWrapper<LendItem> lendItemQueryWrapper = new QueryWrapper<>();
+        lendItemQueryWrapper
+                .eq("lend_id", lendId)
+                .eq("status", status);
+        List<LendItem> lendItemList = baseMapper.selectList(lendItemQueryWrapper);
+        return lendItemList;
+    }
+
+    /**
+     * 根据lend_item_no获取出借记录
+     *
+     * @param agentBillNo
+     * @return
+     */
     private LendItem getByLendItemNo(String agentBillNo) {
         QueryWrapper<LendItem> lendItemQueryWrapper = new QueryWrapper<>();
         lendItemQueryWrapper.eq("lend_item_no", agentBillNo);

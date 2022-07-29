@@ -42,8 +42,16 @@ public class AdminLendController {
 
     @ApiOperation("获取标的的信息")
     @GetMapping("/show/{id}")
-    public R show(@ApiParam(value = "标的id",required = true) @PathVariable Long id) {
-        Map<String,Object> result = lendService.getLendDetail(id);
+    public R show(@ApiParam(value = "标的id", required = true) @PathVariable Long id) {
+        Map<String, Object> result = lendService.getLendDetail(id);
         return R.ok().data("lendDetail", result);
+    }
+
+    @ApiOperation("放款")
+    @GetMapping("/makeLoan/{id}")
+    public R makeLoan(@ApiParam(value = "标的id", required = true)
+                      @PathVariable("id") Long id) {
+        lendService.makeLoan(id);
+        return R.ok().message("放款成功");
     }
 }
