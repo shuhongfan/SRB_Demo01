@@ -65,9 +65,13 @@ export default {
         {
           dangerouslyUseHTMLString: true,
           confirmButtonText: '立即前往',
-          callback: (action) => {
+          callback: async (action) => {
             if (action === 'confirm') {
               //提现
+              let res = await this.$axios.$post(`/api/core/userAccount/auth/commitWithdraw/${this.fetchAmt}`);
+              if (res.code === 0) {
+                document.write(res.data.formStr)
+              }
             }
           },
         }

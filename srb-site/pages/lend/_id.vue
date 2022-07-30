@@ -546,6 +546,25 @@ export default {
       )
 
     },
+    // 还款
+    commitReturn(lendReturnId) {
+      this.$alert(
+          '<div style="size: 18px;color: red;">您即将前往汇付宝确认还款</div>',
+          '前往汇付宝资金托管平台',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '立即前往',
+            callback: async (action) => {
+              if (action === 'confirm') {
+                let res = await this.$axios.$post(`/api/core/lendReturn/auth/commitReturn/${lendReturnId}`)
+                if (res.code === 0) {
+                  document.write(response.data.formStr)
+                }
+              }
+            },
+          }
+      )
+    },
   },
 }
 </script>
