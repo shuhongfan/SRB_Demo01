@@ -63,4 +63,11 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     UserIndexVO getIndexUserInfo(Long userId);
+
+    /**
+     * 根据bindCode获取手机号
+     * @param bindCode
+     * @return
+     */
+    String getMobileByBindCode(String bindCode);
 }

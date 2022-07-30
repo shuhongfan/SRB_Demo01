@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shf.common.exception.Assert;
 import com.shf.common.result.ResponseEnum;
+import com.shf.srb.base.dto.SmsDTO;
 import com.shf.srb.core.enums.TransTypeEnum;
 import com.shf.srb.core.hfb.FormHelper;
 import com.shf.srb.core.hfb.HfbConst;
@@ -18,7 +19,11 @@ import com.shf.srb.core.service.TransFlowService;
 import com.shf.srb.core.service.UserAccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shf.srb.core.service.UserBindService;
+import com.shf.srb.core.service.UserInfoService;
 import com.shf.srb.core.util.LendNoUtils;
+import com.shf.srb.rabbitutil.config.MQConfig;
+import com.shf.srb.rabbitutil.constant.MQConst;
+import com.shf.srb.rabbitutil.service.MQService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +57,11 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     @Resource
     private UserAccountService userAccountService;
 
+    @Resource
+    private UserInfoService userInfoService;
+
+    @Resource
+    private MQService mqService;
 
     /**
      * 充值
@@ -120,6 +130,17 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
                 "充值"
         );
         transFlowService.saveTransFlow(transFlowBO);
+
+//        发消息
+        log.info("发消息");
+        String mobile = userInfoService.getMobileByBindCode(bindCode);
+        SmsDTO smsDTO = new SmsDTO();
+        smsDTO.setMobile(mobile);
+        smsDTO.setMessage("充值成功");
+        mqService.sendMessage(
+                MQConst.EXCHANGE_TOPIC_SMS,
+                MQConst.ROUTING_SMS_ITEM,
+                smsDTO);
 
         return "success";
     }
