@@ -4,6 +4,8 @@ import com.shf.srb.core.pojo.bo.TransFlowBO;
 import com.shf.srb.core.pojo.entity.TransFlow;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 交易流水表 服务类
@@ -26,4 +28,11 @@ public interface TransFlowService extends IService<TransFlow> {
      * @return
      */
     boolean isSaveTransFlow(String agentBillNo);
+
+    /**
+     * 获取资金列表
+     * @param userId
+     * @return
+     */
+    List<TransFlow> selectByUserId(Long userId);
 }

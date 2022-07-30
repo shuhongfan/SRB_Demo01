@@ -529,17 +529,14 @@ export default {
           {
             dangerouslyUseHTMLString: true,
             confirmButtonText: '立即前往',
-            callback: (action) => {
+            callback: async (action) => {
               console.log('action', action)
               if (action === 'confirm') {
                 this.invest.lendId = this.lend.id
-                this.$axios
-                    .$post('/api/core/lendItem/auth/commitInvest', this.invest)
-                    .then((response) => {
-                      // console.log(response.data.formStr)
-                      // debugger
-                      document.write(response.data.formStr)
-                    })
+                let res = await this.$axios.$post('/api/core/lendItem/auth/commitInvest', this.invest);
+                if (res.code === 0) {
+                  document.write(res.data.formStr)
+                }
               }
             },
           }
@@ -558,7 +555,7 @@ export default {
               if (action === 'confirm') {
                 let res = await this.$axios.$post(`/api/core/lendReturn/auth/commitReturn/${lendReturnId}`)
                 if (res.code === 0) {
-                  document.write(response.data.formStr)
+                  document.write(res.data.formStr)
                 }
               }
             },

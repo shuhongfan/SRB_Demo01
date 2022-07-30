@@ -86,7 +86,12 @@ export default {
   },
 
   methods: {
-    fetchUserData() {},
+    async fetchUserData() {
+      let res = await this.$axios.$get('/api/core/userInfo/auth/getIndexUserInfo');
+      if (res.code === 0) {
+        this.userIndexVO = res.data.userIndexVO
+      }
+    },
   },
 }
 </script>

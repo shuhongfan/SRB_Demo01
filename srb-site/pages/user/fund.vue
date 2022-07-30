@@ -58,7 +58,12 @@ export default {
   },
 
   methods: {
-    fetchTransFlowList() {},
+    async fetchTransFlowList() {
+      let res = await this.$axios.$get('/api/core/transFlow/list');
+      if (res.code === 0) {
+        this.transFlowList = res.data.list;
+      }
+    },
   },
 }
 </script>

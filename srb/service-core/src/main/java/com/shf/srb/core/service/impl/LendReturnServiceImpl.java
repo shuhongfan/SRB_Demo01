@@ -88,25 +88,23 @@ public class LendReturnServiceImpl extends ServiceImpl<LendReturnMapper, LendRet
      */
     @Override
     public String commitReturn(Long lendReturnId, Long userId) {
-//        获取还款记录
+
+        //还款记录
         LendReturn lendReturn = baseMapper.selectById(lendReturnId);
 
-//        判断账号余额是否充足
+        //获取用户余额
         BigDecimal amount = userAccountService.getAccount(userId);
-//        NOT_SUFFICIENT_FUNDS_ERROR(307, "余额不足，请充值"),
         Assert.isTrue(amount.doubleValue() >= lendReturn.getTotal().doubleValue(),
                 ResponseEnum.NOT_SUFFICIENT_FUNDS_ERROR);
 
-//        获取借款人code
+        //标的记录
+        Lend lend = lendMapper.selectById(lendReturn.getLendId());
+        //获取还款人的绑定协议号
         String bindCode = userBindService.getBindCodeByUserId(userId);
 
-//        获取lend
-        Long lendId = lendReturn.getLendId();
-        Lend lend = lendMapper.selectById(lendId);
-
-        HashMap<String, Object> paramMap = new HashMap<>();
+        //组装参数
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("agentId", HfbConst.AGENT_ID);
-
         //商户商品名称
         paramMap.put("agentGoodsName", lend.getTitle());
         //批次号
@@ -116,19 +114,18 @@ public class LendReturnServiceImpl extends ServiceImpl<LendReturnMapper, LendRet
         //还款总额
         paramMap.put("totalAmt", lendReturn.getTotal());
         paramMap.put("note", "");
-
-//        还款明细
+        //还款明细
         List<Map<String, Object>> lendItemReturnDetailList = lendItemReturnService.addReturnDetail(lendReturnId);
         paramMap.put("data", JSONObject.toJSONString(lendItemReturnDetailList));
+
         paramMap.put("voteFeeAmt", new BigDecimal(0));
         paramMap.put("notifyUrl", HfbConst.BORROW_RETURN_NOTIFY_URL);
         paramMap.put("returnUrl", HfbConst.BORROW_RETURN_RETURN_URL);
         paramMap.put("timestamp", RequestHelper.getTimestamp());
-
         String sign = RequestHelper.getSign(paramMap);
         paramMap.put("sign", sign);
 
-//        构建自动提交表单
+        //构建自动提交表单
         String formStr = FormHelper.buildForm(HfbConst.BORROW_RETURN_URL, paramMap);
         return formStr;
     }
@@ -141,71 +138,71 @@ public class LendReturnServiceImpl extends ServiceImpl<LendReturnMapper, LendRet
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void notify(Map<String, Object> paramMap) {
+
         log.info("还款成功");
 
-//        还款编号
+        //还款编号
         String agentBatchNo = (String) paramMap.get("agentBatchNo");
 
-        boolean res = transFlowService.isSaveTransFlow(agentBatchNo);
-        if (res) {
+        boolean result = transFlowService.isSaveTransFlow(agentBatchNo);
+        if (result) {
             log.warn("幂等性返回");
             return;
         }
 
-//        获取还款数据
-        String voteFeeAmt = (String) paramMap.get("voteFeeAmt");
+        //获取还款数据
         QueryWrapper<LendReturn> lendReturnQueryWrapper = new QueryWrapper<>();
         lendReturnQueryWrapper.eq("return_no", agentBatchNo);
         LendReturn lendReturn = baseMapper.selectOne(lendReturnQueryWrapper);
 
-//        更新还款状态
+        //更新还款状态
+        String voteFeeAmt = (String) paramMap.get("voteFeeAmt");
         lendReturn.setStatus(1);
         lendReturn.setFee(new BigDecimal(voteFeeAmt));
         lendReturn.setRealReturnTime(LocalDateTime.now());
         baseMapper.updateById(lendReturn);
 
-
-//        更新标的信息
+        //更新标的信息
         Lend lend = lendMapper.selectById(lendReturn.getLendId());
-//        最后一次还款更新的状态
+        //如果是最后一次还款，那么久更新标的状态
         if (lendReturn.getLast()) {
-            lend.setStatus(LendStatusEnum.PAY_RUN.getStatus());
+            lend.setStatus(LendStatusEnum.PAY_OK.getStatus());
             lendMapper.updateById(lend);
         }
 
-//        借款账户转出金额
-        BigDecimal totalAmt = new BigDecimal((String) paramMap.get("totalAmt"));//还款金额
-        String bindCode = userBindService.getBindCodeByUserId(lend.getUserId());
+        //还款账号转出金额
+        BigDecimal totalAmt = new BigDecimal((String) paramMap.get("totalAmt"));
+        String bindCode = userBindService.getBindCodeByUserId(lendReturn.getUserId());
         userAccountMapper.updateAccount(bindCode, totalAmt.negate(), new BigDecimal(0));
 
-//        借款人交易流水
+        //还款流水
         TransFlowBO transFlowBO = new TransFlowBO(
                 agentBatchNo,
                 bindCode,
                 totalAmt,
                 TransTypeEnum.RETURN_DOWN,
                 "借款人还款扣减，项目编号：" + lend.getLendNo() + "，项目名称：" + lend.getTitle());
-
         transFlowService.saveTransFlow(transFlowBO);
 
-//        获取回款明细
+        //回款明细的获取
         List<LendItemReturn> lendItemReturnList = lendItemReturnService.selectLendItemReturnList(lendReturn.getId());
         lendItemReturnList.forEach(item -> {
-//            更新回款状态
+
+            //更新回款状态
             item.setStatus(1);
             item.setRealReturnTime(LocalDateTime.now());
             lendItemReturnMapper.updateById(item);
 
-//            更新出借信息
-            LendItem lendItem = lendItemMapper.selectById(item.getLendReturnId());
-            lendItem.setRealAmount(item.getInterest());
+            //更新出借信息
+            LendItem lendItem = lendItemMapper.selectById(item.getLendItemId());
+            lendItem.setRealAmount(lendItem.getRealAmount().add(item.getInterest())); //动态的实际收益
             lendItemMapper.updateById(lendItem);
 
-//            投资账号转入金额
+            // 投资账号转入金额
             String investBindCode = userBindService.getBindCodeByUserId(item.getInvestUserId());
             userAccountMapper.updateAccount(investBindCode, item.getTotal(), new BigDecimal(0));
 
-            //投资账号交易流水
+            //回款流水
             TransFlowBO investTransFlowBO = new TransFlowBO(
                     LendNoUtils.getReturnItemNo(),
                     investBindCode,
@@ -214,6 +211,5 @@ public class LendReturnServiceImpl extends ServiceImpl<LendReturnMapper, LendRet
                     "还款到账，项目编号：" + lend.getLendNo() + "，项目名称：" + lend.getTitle());
             transFlowService.saveTransFlow(investTransFlowBO);
         });
-
     }
 }
